@@ -1,0 +1,21 @@
+---
+import type { PokemonSingleInterface } from '../../interfaces/pokemon-Single.response';
+
+interface Props {
+    urlPokemon: string
+}
+const {urlPokemon} = Astro.props
+const resp = await fetch(urlPokemon);
+const data = (await resp.json()) as PokemonSingleInterface;
+
+
+---
+
+<div class="rounded border flex flex-col justify-center items-center p-2">
+    {
+<img src={data.sprites.back_default} alt={data.name}>
+<span>{data.name}</span>
+    }
+    
+    
+</div>
