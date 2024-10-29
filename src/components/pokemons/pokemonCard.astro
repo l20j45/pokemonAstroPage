@@ -14,7 +14,8 @@ const data = (await resp.json()) as PokemonSingleInterface;
 <div class="rounded border flex flex-col justify-center items-center p-2">
     {
 <img src={data.sprites.back_default} alt={data.name}>
-<span>{data.name}</span>
+<a href=`pokemons/${data.name}` class="capitalize text-blue-500">{data.name}</a>
+
     }
     
     
