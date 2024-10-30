@@ -1,22 +1,18 @@
 ---
 import type { GetStaticPaths } from "astro";
+import type { PokemonSingleInterface } from "../../interfaces/pokemon-Single.response";
+import type { PokemonListResponse } from "../../interfaces/pokemon-list.response";
+
 import MainLayout from "../../layouts/MainLayout.astro";
 import PokemonCard from "../../components/pokemons/pokemonCard.astro";
-import type { PokemonSingleInterface } from "../../interfaces/pokemon-Single.response";
 
-export const getStaticPaths = (() => {
-    return [
-        {
-            params: { name: "bulbasaur" },
-            props: {
-                name: "bulbasaur",
-                urlPokemon: "https://pokeapi.co/api/v2/pokemon/1/",
-            },
-        },
-        { params: { name: "charmander" } },
-        { params: { name: "squirtle" } },
-        { params: { name: "raticate" } },
-    ];
+export const getStaticPaths = (async () => {
+    const resp = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
+    const { results } = (await resp.json()) as PokemonListResponse;
+    return results.map((pokemon) => ({
+        params: { name: pokemon.name },
+        props: { urlPokemon: pokemon.url },
+    }));
 }) satisfies GetStaticPaths;
 
 const { name } = Astro.params;
