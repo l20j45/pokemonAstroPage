@@ -22,6 +22,7 @@ const data = (await resp.json()) as PokemonSingleInterface;
     ]}
 >
     <img
+    transition:name={`${data.name}-image`}
         src={data.sprites.back_default}
         alt={data.name}
         class:list={[
