@@ -9,9 +9,9 @@ import PokemonCard from "../../components/pokemons/pokemonCard.astro";
 export const getStaticPaths = (async () => {
     const resp = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
     const { results } = (await resp.json()) as PokemonListResponse;
-    return results.map((pokemon) => ({
-        params: { name: pokemon.name },
-        props: { urlPokemon: pokemon.url },
+    return results.map(({name, url}) => ({
+        params: { name },
+        props: { name, urlPokemon: url },
     }));
 }) satisfies GetStaticPaths;
 
@@ -27,11 +27,13 @@ const audioSource = data.cries.latest;
     <section class="mt-10 mx-10 flex flex-col justify-center items-center">
         <div>
             <a href="/">Regresar</a>
-            <h1 class="text-5xl capitalize">Hola {name}</h1>
+            <h1 class="text-5xl capitalize">{name}</h1>
         </div>
 
-        <PokemonCard urlPokemon={urlPokemon} />
-        <audio controls class="mt-5">
+        <div class=" w-96 h-96">
+        <PokemonCard urlPokemon={urlPokemon} isBig />
+    </div>
+        <audio controls class="mt-11">
             <source src={audioSource} type="audio/ogg" />
             Your browser does not support the audio element
         </audio>

@@ -1,22 +1,43 @@
 ---
-import type { PokemonSingleInterface } from '../../interfaces/pokemon-Single.response';
+import { fade } from "astro:transitions";
+import type { PokemonSingleInterface } from "../../interfaces/pokemon-Single.response";
 
 interface Props {
-    urlPokemon: string
+    urlPokemon: string;
+    isBig?: boolean;
 }
-const {urlPokemon} = Astro.props
+const { urlPokemon, isBig = false } = Astro.props;
 const resp = await fetch(urlPokemon);
 const data = (await resp.json()) as PokemonSingleInterface;
-
-
 ---
 
-<div class="rounded border flex flex-col justify-center items-center p-2">
-    {
-<img src={data.sprites.back_default} alt={data.name}>
-<a href=`pokemons/${data.name}` class="capitalize text-blue-500">{data.name}</a>
-
-    }
-    
-    
-</div>
+<!-- class={`rounded flex flex-col justify-center items-center p-2 ${!isBig && 'border'}`} -->
+<a
+    href=`pokemons/${data.name}`
+    class:list={[
+        `rounded flex flex-col justify-center items-center p-2`,
+        {
+            border: !isBig,
+        },
+    ]}
+>
+    <img
+        src={data.sprites.back_default}
+        alt={data.name}
+        class:list={[
+            {
+                "w-26 h-26": isBig,
+                "w-16 h-16": !isBig,
+            },
+        ]}
+    />
+    <span
+        class:list={[
+            `capitalize text-blue-500`,
+            {
+                "text-3xl": isBig,
+            },
+        ]}
+        >#{data.id} {data.name}
+    </span>
+</a>
